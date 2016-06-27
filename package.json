@@ -1,0 +1,29 @@
+{
+  "name": "python-struct",
+  "version": "1.0.0",
+  "description": "Packs/Unpacks/Measures structs according to Python's `struct` format",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danielgindi/python-struct"
+  },
+  "keywords": [
+    "pack",
+    "unpack",
+    "struct",
+    "cstruct",
+    "python"
+  ],
+  "author": "Daniel Cohen Gindi <danielgindi@gmail.com> (https://github.com/danielgindi)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danielgindi/python-struct/issues"
+  },
+  "homepage": "https://github.com/danielgindi/python-struct",
+  "dependencies": {
+    "long": "^3.1.0"
+  }
+}
