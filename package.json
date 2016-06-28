@@ -1,6 +1,6 @@
 {
   "name": "python-struct",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Packs/Unpacks/Measures structs according to Python's `struct` format",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/danielgindi/python-struct"
+    "url": "https://github.com/danielgindi/node-python-struct"
   },
   "keywords": [
     "pack",
