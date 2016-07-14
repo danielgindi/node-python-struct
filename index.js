@@ -236,16 +236,16 @@ const NATIVE_MAP = {
 };
 
 const LITTLE_ENDIAN_MAP = {
-    'x': [ 1, 1, null, null ],
+    'x': [ 1, 0, null, null ],
     'c': [
         1,
-        1,
+        0,
         function (data, pos) { return String.fromCharCode(data[pos]) },
         function (data, pack, pos) { pack[pos] = data.charCodeAt(0) }
     ],
     'b': [
         1,
-        1,
+        0,
         function (data, pos) { return data.readInt8(pos) },
         function (data, pack, pos) { pack.writeInt8(data, pos, true) }
     ],
@@ -257,29 +257,29 @@ const LITTLE_ENDIAN_MAP = {
     ],
     'h': [
         2,
-        2,
+        1,
         function (data, pos) { return data.readInt16LE(pos) },
         function (data, pack, pos) { return pack.writeInt16LE(data, pos, true) }
     ],
     'H': [
         2,
-        2,
+        1,
         function (data, pos) { return data.readUInt16LE(pos) },
         function (data, pack, pos) { return pack.writeUInt16LE(data, pos, true) }
     ],
-    'i': [ 4, 4, UNPACK_INT32_LE, PACK_INT32_LE ],
-    'I': [ 4, 4, UNPACK_UINT32_LE, PACK_UINT32_LE ],
-    'l': [ 4, 4, UNPACK_INT32_LE, PACK_INT32_LE ],
-    'L': [ 4, 4, UNPACK_UINT32_LE, PACK_UINT32_LE ],
+    'i': [ 4, 1, UNPACK_INT32_LE, PACK_INT32_LE ],
+    'I': [ 4, 1, UNPACK_UINT32_LE, PACK_UINT32_LE ],
+    'l': [ 4, 1, UNPACK_INT32_LE, PACK_INT32_LE ],
+    'L': [ 4, 1, UNPACK_UINT32_LE, PACK_UINT32_LE ],
     'f': [
         4,
-        4,
+        1,
         function (data, pos) { return data.readFloatLE(pos) },
         function (data, pack, pos) { return pack.writeFloatLE(data, pos, true) }
     ],
     'd': [
         8,
-        8,
+        1,
         function (data, pos) { return data.readDoubleLE(pos) },
         function (data, pack, pos) { return pack.writeDoubleLE(data, pos, true) }
     ],
@@ -287,12 +287,12 @@ const LITTLE_ENDIAN_MAP = {
     'p': [ 1, 1, UNPACK_PASCAL_STRING, PACK_PASCAL_STRING ],
     'P': [
         IS_64bit ? 8 : 4,
-        IS_64bit ? 8 : 4,
+        1,
         IS_64bit ? UNPACK_UINT64_LE : UNPACK_UINT32_LE,
         IS_64bit ? PACK_UINT64_LE : PACK_UINT32_LE
     ],
-    'q': [ 8, 8, UNPACK_INT64_LE, PACK_INT64_LE ],
-    'Q': [ 8, 8, UNPACK_UINT64_LE, PACK_UINT64_LE ],
+    'q': [ 8, 1, UNPACK_INT64_LE, PACK_INT64_LE ],
+    'Q': [ 8, 1, UNPACK_UINT64_LE, PACK_UINT64_LE ],
     '?': [
         1,
         1,
@@ -323,29 +323,29 @@ const BIG_ENDIAN_MAP = {
     ],
     'h': [
         2,
-        2,
+        1,
         function (data, pos) { return data.readInt16BE(pos) },
         function (data, pack, pos) { return pack.writeInt16BE(data, pos, true) }
     ],
     'H': [
         2,
-        2,
+        1,
         function (data, pos) { return data.readUInt16BE(pos) },
         function (data, pack, pos) { return pack.writeUInt16BE(data, pos, true) }
     ],
-    'i': [ 4, 4, UNPACK_INT32_BE, PACK_INT32_BE ],
-    'I': [ 4, 4, UNPACK_UINT32_BE, PACK_UINT32_BE ],
-    'l': [ 4, 4, UNPACK_INT32_BE, PACK_INT32_BE ],
-    'L': [ 4, 4, UNPACK_UINT32_BE, PACK_UINT32_BE ],
+    'i': [ 4, 1, UNPACK_INT32_BE, PACK_INT32_BE ],
+    'I': [ 4, 1, UNPACK_UINT32_BE, PACK_UINT32_BE ],
+    'l': [ 4, 1, UNPACK_INT32_BE, PACK_INT32_BE ],
+    'L': [ 4, 1, UNPACK_UINT32_BE, PACK_UINT32_BE ],
     'f': [
         4,
-        4,
+        1,
         function (data, pos) { return data.readFloatBE(pos) },
         function (data, pack, pos) { return pack.writeFloatBE(data, pos, true) }
     ],
     'd': [
         8,
-        8,
+        1,
         function (data, pos) { return data.readDoubleBE(pos) },
         function (data, pack, pos) { return pack.writeDoubleBE(data, pos, true) }
     ],
@@ -353,12 +353,12 @@ const BIG_ENDIAN_MAP = {
     'p': [ 1, 1, UNPACK_PASCAL_STRING, PACK_PASCAL_STRING ],
     'P': [
         IS_64bit ? 8 : 4,
-        IS_64bit ? 8 : 4,
+        1,
         IS_64bit ? UNPACK_UINT64_BE : UNPACK_UINT32_BE,
         IS_64bit ? PACK_UINT64_BE : PACK_UINT32_BE
     ],
-    'q': [ 8, 8, UNPACK_INT64_BE, PACK_INT64_BE ],
-    'Q': [ 8, 8, UNPACK_UINT64_BE, PACK_UINT64_BE ],
+    'q': [ 8, 1, UNPACK_INT64_BE, PACK_INT64_BE ],
+    'Q': [ 8, 1, UNPACK_UINT64_BE, PACK_UINT64_BE ],
     '?': [
         1,
         1,
