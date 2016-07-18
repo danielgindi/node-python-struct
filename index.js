@@ -504,6 +504,12 @@ var PythonStruct = {
     },
 
     pack: function (format, data, checkBounds) {
+        
+        // Support python-style argument array for data
+        if (!Array.isArray(data)) {
+            data = Array.prototype.slice.call(arguments, 1);
+            checkBounds = true;
+        }
 
         var packed = new Buffer(PythonStruct.sizeOf(format));
 
