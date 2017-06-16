@@ -236,16 +236,16 @@ const NATIVE_MAP = {
 };
 
 const LITTLE_ENDIAN_MAP = {
-    'x': [ 1, 0, null, null ],
+    'x': [ 1, 1, null, null ],
     'c': [
         1,
-        0,
+        1,
         function (data, pos) { return String.fromCharCode(data[pos]) },
         function (data, pack, pos) { pack[pos] = data.charCodeAt(0) }
     ],
     'b': [
         1,
-        0,
+        1,
         function (data, pos) { return data.readInt8(pos) },
         function (data, pack, pos) { pack.writeInt8(data, pos, true) }
     ],
@@ -426,7 +426,9 @@ var PythonStruct = {
 
             // Align position
             align = op[1];
-            size = Math.ceil(size / align) * align;
+            if (align > 1) {
+                size = Math.ceil(size / align) * align;
+            }
 
             // Update size
             decimal = decimal ? parseInt(decimal, 10) : 0;
@@ -472,7 +474,9 @@ var PythonStruct = {
             
             // Align position
             align = op[1];
-            position = Math.ceil(position / align) * align;
+            if (align > 1) {
+                position = Math.ceil(position / align) * align;
+            }
 
             // Unpack
             decimal = decimal ? parseInt(decimal, 10) : 0;
@@ -539,7 +543,9 @@ var PythonStruct = {
 
             // Align position
             align = op[1];
-            position = Math.ceil(position / align) * align;
+            if (align > 1) {
+                position = Math.ceil(position / align) * align;
+            }
 
             // Pack
             decimal = decimal ? parseInt(decimal, 10) : 0;
