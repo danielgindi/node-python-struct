@@ -480,7 +480,17 @@ var PythonStruct = {
 
             // Unpack
             decimal = decimal ? parseInt(decimal, 10) : 0;
-            repeat = (decimal && c !== 's' && c !== 'p') ? decimal : 1;
+            
+            if (c === 's') {
+                repeat = 1;
+                size = decimal;
+            } else if (c === 'p') {
+                repeat = 1;
+                size = decimal || 1;
+            } else {
+                repeat = decimal || 1;
+            }
+            
             unpack = op[2];
             while (repeat > 0) {
 				
@@ -549,7 +559,17 @@ var PythonStruct = {
 
             // Pack
             decimal = decimal ? parseInt(decimal, 10) : 0;
-            repeat = (decimal && c !== 's' && c !== 'p') ? decimal : 1;
+            
+            if (c === 's') {
+                repeat = 1;
+                size = decimal;
+            } else if (c === 'p') {
+                repeat = 1;
+                size = decimal || 1;
+            } else {
+                repeat = decimal || 1;
+            }
+            
             pack = op[3];
             while (repeat > 0) {
 				
@@ -562,11 +582,12 @@ var PythonStruct = {
                     }
                     
                     pack(data[dIndex], packed, position, decimal);
-					
-					// Update position according to size
-					position += size;
+
                     dIndex++;
                 }
+                
+                // Update position according to size
+                position += size;
 
                 // Decrement repeat count
                 repeat--;
