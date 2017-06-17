@@ -24,6 +24,6 @@
   },
   "homepage": "https://github.com/danielgindi/node-python-struct",
   "dependencies": {
-    "long": "^3.1.0"
+    "long": "^3.2.0"
   }
 }
