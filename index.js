@@ -497,7 +497,7 @@ var PythonStruct = {
                 if (unpack) {
 					
 					if (checkBounds) {
-                        if (position + size >= buffer.length) {
+                        if (position + size >= data.length) {
                             throw new Error('Reached end of buffer, can\'t unpack anymore data.');
                         }
                     }
