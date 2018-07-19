@@ -1,4 +1,7 @@
 const Long = require('long');
+// If Node.js doesn't supply buffer, then load a replacement.
+// This will occur on browsers.
+if (!Buffer) Buffer = require('buffer/').Buffer;
 
 /**
  *  Copied over from python's notes:
