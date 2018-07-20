@@ -1,7 +1,14 @@
 const Long = require('long');
 // If Node.js doesn't supply buffer, then load a replacement.
 // This will occur on browsers.
-if (!Buffer) Buffer = require('buffer/').Buffer;
+if (!Buffer) {
+    try {
+        Buffer = require('buffer/').Buffer;
+    } catch (e) {
+        throw new Error("You're using a platform that doesn't have buffer support!\n" +
+                        "Install feross/buffer module through your package manager.");
+    }
+}
 
 /**
  *  Copied over from python's notes:
