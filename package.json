@@ -1,6 +1,6 @@
 {
   "name": "python-struct",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Packs/Unpacks/Measures structs according to Python's `struct` format",
   "main": "index.js",
   "scripts": {
