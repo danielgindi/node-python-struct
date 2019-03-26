@@ -446,10 +446,13 @@ var PythonStruct = {
     },
 
     unpack: function (format, data, checkBounds) {
+        this.unpackFrom(format, data, checkBounds, 0)
+    },
+
+    unpackFrom: function (format, data, checkBounds, position) {
 
         var unpacked = [];
 
-        var position = 0;
         var decimal = null;
 
         var i = 0, c, len, op, size, align, repeat, unpack;
