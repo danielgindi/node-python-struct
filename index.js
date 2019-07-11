@@ -446,7 +446,7 @@ var PythonStruct = {
     },
 
     unpack: function (format, data, checkBounds) {
-        this.unpackFrom(format, data, checkBounds, 0)
+        return this.unpackFrom(format, data, checkBounds, 0)
     },
 
     unpackFrom: function (format, data, checkBounds, position) {
