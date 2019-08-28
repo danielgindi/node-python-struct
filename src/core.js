@@ -518,10 +518,10 @@ function generateClass(options) {
                         }
 
                         unpacked.push(unpack(data, position, decimal));
-
-                        // Update position according to size
-                        position += size;
                     }
+
+                    // Update position according to size
+                    position += size;
 
                     // Decrement repeat count
                     repeat--;
