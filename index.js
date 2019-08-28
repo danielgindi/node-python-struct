@@ -56,7 +56,7 @@ const UNPACK_PASCAL_STRING = (data, pos, length) => {
     if (n >= length) {
         n = length - 1;
     }
-    pos ++;
+    pos++;
     return data.slice(pos, pos + n).toString('utf8');
 };
 
@@ -78,10 +78,10 @@ const UNPACK_UINT32_LE = (data, pos) => data.readUInt32LE(pos, true);
 const UNPACK_UINT32_BE = (data, pos) => data.readUInt32BE(pos, true);
 const UNPACK_INT32_LE = (data, pos) => data.readInt32LE(pos, true);
 const UNPACK_INT32_BE = (data, pos) => data.readInt32BE(pos, true);
-const PACK_UINT32_LE = (data, pack, pos) => { pack.writeUInt32LE(data, pos, true) };
-const PACK_UINT32_BE = (data, pack, pos) => { pack.writeUInt32BE(data, pos, true) };
-const PACK_INT32_LE = (data, pack, pos) => { pack.writeInt32LE(data, pos, true) };
-const PACK_INT32_BE = (data, pack, pos) => { pack.writeInt32BE(data, pos, true) };
+const PACK_UINT32_LE = (data, pack, pos) => { pack.writeUInt32LE(data, pos, true); };
+const PACK_UINT32_BE = (data, pack, pos) => { pack.writeUInt32BE(data, pos, true); };
+const PACK_INT32_LE = (data, pack, pos) => { pack.writeInt32LE(data, pos, true); };
+const PACK_INT32_BE = (data, pack, pos) => { pack.writeInt32BE(data, pos, true); };
 
 const UNPACK_UINT64_LE = (data, pos) => Long.fromBits(data.readInt32LE(pos), data.readInt32LE(pos + 4), true);
 const UNPACK_UINT64_BE = (data, pos) => Long.fromBits(data.readInt32BE(pos + 4), data.readInt32BE(pos), true);
@@ -115,19 +115,19 @@ const NATIVE_MAP = {
         1,
         1,
         (data, pos) => String.fromCharCode(data[pos]),
-        (data, pack, pos) => { pack[pos] = data.charCodeAt(0) }
+        (data, pack, pos) => { pack[pos] = data.charCodeAt(0); },
     ],
     'b': [
         1,
         1,
         (data, pos) => data.readInt8(pos),
-        (data, pack, pos) => { pack.writeInt8(data, pos, true) }
+        (data, pack, pos) => { pack.writeInt8(data, pos, true); },
     ],
     'B': [
         1, 
         1,
         (data, pos) => data[pos],
-        (data, pack, pos) => { pack[pos] = data }
+        (data, pack, pos) => { pack[pos] = data; },
     ],
     'h': [
         2,
@@ -137,7 +137,7 @@ const NATIVE_MAP = {
             : (data, pos) => data.readInt16BE(pos),
         IS_LITTLE_ENDIAN
             ? (data, pack, pos) => pack.writeInt16LE(data, pos, true)
-            : (data, pack, pos) => pack.writeInt16BE(data, pos, true)
+            : (data, pack, pos) => pack.writeInt16BE(data, pos, true),
     ],
     'H': [
         2,
@@ -147,31 +147,31 @@ const NATIVE_MAP = {
             : (data, pos) => data.readUInt16BE(pos),
         IS_LITTLE_ENDIAN
             ? (data, pack, pos) => pack.writeUInt16LE(data, pos, true)
-            : (data, pack, pos) => pack.writeUInt16BE(data, pos, true)
+            : (data, pack, pos) => pack.writeUInt16BE(data, pos, true),
     ],
     'i': [
         4,
         4,
         IS_LITTLE_ENDIAN ? UNPACK_INT32_LE : UNPACK_INT32_BE,
-        IS_LITTLE_ENDIAN ? PACK_INT32_LE : PACK_INT32_BE
+        IS_LITTLE_ENDIAN ? PACK_INT32_LE : PACK_INT32_BE,
     ],
     'I': [
         4,
         4,
         IS_LITTLE_ENDIAN ? UNPACK_UINT32_LE : UNPACK_UINT32_BE,
-        IS_LITTLE_ENDIAN ? PACK_UINT32_LE : PACK_UINT32_BE
+        IS_LITTLE_ENDIAN ? PACK_UINT32_LE : PACK_UINT32_BE,
     ],
     'l': [
         4,
         4,
         IS_LITTLE_ENDIAN ? UNPACK_INT32_LE : UNPACK_INT32_BE,
-        IS_LITTLE_ENDIAN ? PACK_INT32_LE : PACK_INT32_BE
+        IS_LITTLE_ENDIAN ? PACK_INT32_LE : PACK_INT32_BE,
     ],
     'L': [
         4,
         4,
         IS_LITTLE_ENDIAN ? UNPACK_UINT32_LE : UNPACK_UINT32_BE,
-        IS_LITTLE_ENDIAN ? PACK_UINT32_LE : PACK_UINT32_BE
+        IS_LITTLE_ENDIAN ? PACK_UINT32_LE : PACK_UINT32_BE,
     ],
     'f': [
         4,
@@ -181,7 +181,7 @@ const NATIVE_MAP = {
             : (data, pos) => data.readFloatBE(pos),
         IS_LITTLE_ENDIAN
             ? (data, pack, pos) => pack.writeFloatLE(data, pos, true)
-            : (data, pack, pos) => pack.writeFloatBE(data, pos, true)
+            : (data, pack, pos) => pack.writeFloatBE(data, pos, true),
     ],
     'd': [
         8,
@@ -191,7 +191,7 @@ const NATIVE_MAP = {
             : (data, pos) => data.readDoubleBE(pos),
         IS_LITTLE_ENDIAN
             ? (data, pack, pos) => pack.writeDoubleLE(data, pos, true)
-            : (data, pack, pos) => pack.writeDoubleBE(data, pos, true)
+            : (data, pack, pos) => pack.writeDoubleBE(data, pos, true),
     ],
     's': [ 1, 1, UNPACK_STRING, PACK_STRING ],
     'p': [ 1, 1, UNPACK_PASCAL_STRING, PACK_PASCAL_STRING ],
@@ -203,26 +203,26 @@ const NATIVE_MAP = {
             : (IS_64bit ? UNPACK_UINT64_BE : UNPACK_UINT32_BE),
         IS_LITTLE_ENDIAN ?
             (IS_64bit ? PACK_UINT64_LE : PACK_UINT32_LE)
-            : (IS_64bit ? PACK_UINT64_BE : PACK_UINT32_BE)
+            : (IS_64bit ? PACK_UINT64_BE : PACK_UINT32_BE),
     ],
     'q': [
         8,
         8,
         IS_LITTLE_ENDIAN ? UNPACK_INT64_LE : UNPACK_INT64_BE,
-        IS_LITTLE_ENDIAN ? PACK_INT64_LE : PACK_INT64_BE
+        IS_LITTLE_ENDIAN ? PACK_INT64_LE : PACK_INT64_BE,
     ],
     'Q': [
         8,
         8,
         IS_LITTLE_ENDIAN ? UNPACK_UINT64_LE : UNPACK_UINT64_BE,
-        IS_LITTLE_ENDIAN ? PACK_UINT64_LE : PACK_UINT64_BE
+        IS_LITTLE_ENDIAN ? PACK_UINT64_LE : PACK_UINT64_BE,
     ],
     '?': [
         1,
         1,
         (data, pos) => data[pos] !== 0,
-        (data, pack, pos) => { pack[pos] = data ? 1 : 0 }
-    ]
+        (data, pack, pos) => { pack[pos] = data ? 1 : 0; },
+    ],
 };
 
 const LITTLE_ENDIAN_MAP = {
@@ -231,19 +231,19 @@ const LITTLE_ENDIAN_MAP = {
         1,
         1,
         (data, pos) => String.fromCharCode(data[pos]),
-        (data, pack, pos) => { pack[pos] = data.charCodeAt(0) }
+        (data, pack, pos) => { pack[pos] = data.charCodeAt(0); },
     ],
     'b': [
         1,
         1,
         (data, pos) => data.readInt8(pos),
-        (data, pack, pos) => { pack.writeInt8(data, pos, true) }
+        (data, pack, pos) => { pack.writeInt8(data, pos, true); },
     ],
     'B': [
         1,
         1,
         (data, pos) => data[pos],
-        (data, pack, pos) => { pack[pos] = data }
+        (data, pack, pos) => { pack[pos] = data; },
     ],
     'h': [
         2,
@@ -279,7 +279,7 @@ const LITTLE_ENDIAN_MAP = {
         IS_64bit ? 8 : 4,
         1,
         IS_64bit ? UNPACK_UINT64_LE : UNPACK_UINT32_LE,
-        IS_64bit ? PACK_UINT64_LE : PACK_UINT32_LE
+        IS_64bit ? PACK_UINT64_LE : PACK_UINT32_LE,
     ],
     'q': [ 8, 1, UNPACK_INT64_LE, PACK_INT64_LE ],
     'Q': [ 8, 1, UNPACK_UINT64_LE, PACK_UINT64_LE ],
@@ -287,8 +287,8 @@ const LITTLE_ENDIAN_MAP = {
         1,
         1,
         (data, pos) => data[pos] !== 0,
-        (data, pack, pos) => { pack[pos] = data ? 1 : 0 }
-    ]
+        (data, pack, pos) => { pack[pos] = data ? 1 : 0; },
+    ],
 };
 
 const BIG_ENDIAN_MAP = {
@@ -297,19 +297,19 @@ const BIG_ENDIAN_MAP = {
         1,
         1,
         (data, pos) => String.fromCharCode(data[pos]),
-        (data, pack, pos) => { pack[pos] = data.charCodeAt(0) }
+        (data, pack, pos) => { pack[pos] = data.charCodeAt(0); },
     ],
     'b': [
         1,
         1,
         (data, pos) => data.readInt8(pos),
-        (data, pack, pos) => { pack.writeInt8(data, pos, true) }
+        (data, pack, pos) => { pack.writeInt8(data, pos, true); },
     ],
     'B': [
         1,
         1,
         (data, pos) => data[pos],
-        (data, pack, pos) => { pack[pos] = data }
+        (data, pack, pos) => { pack[pos] = data; },
     ],
     'h': [
         2,
@@ -345,7 +345,7 @@ const BIG_ENDIAN_MAP = {
         IS_64bit ? 8 : 4,
         1,
         IS_64bit ? UNPACK_UINT64_BE : UNPACK_UINT32_BE,
-        IS_64bit ? PACK_UINT64_BE : PACK_UINT32_BE
+        IS_64bit ? PACK_UINT64_BE : PACK_UINT32_BE,
     ],
     'q': [ 8, 1, UNPACK_INT64_BE, PACK_INT64_BE ],
     'Q': [ 8, 1, UNPACK_UINT64_BE, PACK_UINT64_BE ],
@@ -353,8 +353,8 @@ const BIG_ENDIAN_MAP = {
         1,
         1,
         (data, pos) => data[pos] !== 0,
-        (data, pack, pos) => { pack[pos] = data ? 1 : 0 }
-    ]
+        (data, pack, pos) => { pack[pos] = data ? 1 : 0; },
+    ],
 };
 
 let selectMap = format => {
@@ -378,15 +378,14 @@ let selectMap = format => {
             break;
 
         default:
-            skipFirst = false;
+            skipFirst = false; // fallthrough
 
-        //noinspection FallThroughInSwitchStatementJS
         case '@':
             map = NATIVE_MAP;
             break;
     }
 
-    return {map: map, skipFirst: skipFirst};
+    return { map: map, skipFirst: skipFirst };
 };
 
 class PythonStruct {
@@ -436,7 +435,7 @@ class PythonStruct {
     }
 
     unpack (format, data, checkBounds) {
-        return this.unpackFrom(format, data, checkBounds, 0)
+        return this.unpackFrom(format, data, checkBounds, 0);
     }
 
     unpackFrom(format, data, checkBounds, position) {
