@@ -67,7 +67,7 @@ const UNPACK_PASCAL_STRING = (data, pos, length) => {
 };
 
 const PACK_PASCAL_STRING = (data, pack, pos, length) => {
-    let bytes = new Buffer(data, 'utf8');
+    let bytes = Buffer.alloc(data, 'utf8');
     let n = bytes.length;
     if (n >= length) {
         n = length - 1;
@@ -540,7 +540,7 @@ function generateClass(options) {
                 checkBounds = true;
             }
 
-            let packed = new Buffer(PythonStruct.sizeOf(format));
+            let packed = Buffer.alloc(PythonStruct.sizeOf(format));
 
             let position = 0;
             let decimal = null;
