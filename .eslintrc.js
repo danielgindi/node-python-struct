@@ -49,6 +49,16 @@ module.exports = {
     overrides: [
         {
             files: [
+                "src/browser_adapter.js",
+            ],
+            env: {
+                es6: true,
+                browser: true,
+                node: true,
+            },
+        },
+        {
+            files: [
                 "tests/**/*tests.js",
             ],
             env: {

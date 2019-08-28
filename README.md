@@ -24,12 +24,17 @@ struct.unpack('>iixxQ10sb', Buffer.from('000004d20000162eab54a98ceb1f0ad26162636
 
 ```
 
+## Usage in the browser
+
+The `"browser"` entry in `package.json` will automatically redirect to the browser adapter for the package.  
+*But* you'll have to `npm i buffer` in your project.
+
 ## Notes
 
 When using "native" size & alignment, we do not really have a way to find the native size of alignment of types.  
-But it's almost always safe to assume that `node.js` is compiled for the standard architectures, so `native` behaves like `standard`.
+But it's almost always safe to assume that `node_adapter.js` is compiled for the standard architectures, so `native` behaves like `standard`.
 
-If anyone stumbles accross a different case, I'll be happy to review it on that specific instance, and figure out what to do.
+If anyone stumbles across a different case, I'll be happy to review it on that specific instance, and figure out what to do.
 
 ## Contributing
 

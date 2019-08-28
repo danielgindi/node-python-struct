@@ -2,7 +2,8 @@
   "name": "python-struct",
   "version": "1.0.8",
   "description": "Packs/Unpacks/Measures structs according to Python's `struct` format",
-  "main": "index.js",
+  "main": "src/node_adapter.js",
+  "browser": "src/browser_adapter.js",
   "scripts": {
     "lint": "eslint ./",
     "lint-fix": "eslint --fix ./",
