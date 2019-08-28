@@ -38,21 +38,21 @@ const IS_64bit = process.arch === 'x64';
 
 // Maps consist of: size, alignment, unpack function
 
-const UNPACK_STRING = function (data, pos, length) {
-    var nextZero = data.indexOf(0, pos);
-    var endIndex = Math.min(pos + length, nextZero === -1 ? data.length : nextZero);
+const UNPACK_STRING = (data, pos, length) => {
+    const nextZero = data.indexOf(0, pos);
+    const endIndex = Math.min(pos + length, nextZero === -1 ? data.length : nextZero);
     return data.slice(pos, endIndex).toString('utf8');
 };
 
-const PACK_STRING = function (data, pack, pos, length) {
-    var written = pack.write(data, pos, length, 'utf8');
+const PACK_STRING = (data, pack, pos, length) => {
+    const written = pack.write(data, pos, length, 'utf8');
     if (written < length) {
         pack.fill(0, pos + written, pos + length);
     }
 };
 
-const UNPACK_PASCAL_STRING = function (data, pos, length) {
-    var n = data[0];
+const UNPACK_PASCAL_STRING = (data, pos, length) => {
+    let n = data[0];
     if (n >= length) {
         n = length - 1;
     }
@@ -60,9 +60,9 @@ const UNPACK_PASCAL_STRING = function (data, pos, length) {
     return data.slice(pos, pos + n).toString('utf8');
 };
 
-const PACK_PASCAL_STRING = function (data, pack, pos, length) {
-    var bytes = new Buffer(data, 'utf8');
-    var n = bytes.length;
+const PACK_PASCAL_STRING = (data, pack, pos, length) => {
+    let bytes = new Buffer(data, 'utf8');
+    let n = bytes.length;
     if (n >= length) {
         n = length - 1;
     }
@@ -74,38 +74,27 @@ const PACK_PASCAL_STRING = function (data, pack, pos, length) {
     pack.fill(0, pos + 1 + n, pos + length);
 };
 
-const UNPACK_UINT32_LE = function (data, pos) { return data.readUInt32LE(pos, true) };
-const UNPACK_UINT32_BE = function (data, pos) { return data.readUInt32BE(pos, true) };
-const UNPACK_INT32_LE = function (data, pos) { return data.readInt32LE(pos, true) };
-const UNPACK_INT32_BE = function (data, pos) { return data.readInt32BE(pos, true) };
-const PACK_UINT32_LE = function (data, pack, pos) { pack.writeUInt32LE(data, pos, true) };
-const PACK_UINT32_BE = function (data, pack, pos) { pack.writeUInt32BE(data, pos, true) };
-const PACK_INT32_LE = function (data, pack, pos) { pack.writeInt32LE(data, pos, true) };
-const PACK_INT32_BE = function (data, pack, pos) { pack.writeInt32BE(data, pos, true) };
+const UNPACK_UINT32_LE = (data, pos) => data.readUInt32LE(pos, true);
+const UNPACK_UINT32_BE = (data, pos) => data.readUInt32BE(pos, true);
+const UNPACK_INT32_LE = (data, pos) => data.readInt32LE(pos, true);
+const UNPACK_INT32_BE = (data, pos) => data.readInt32BE(pos, true);
+const PACK_UINT32_LE = (data, pack, pos) => { pack.writeUInt32LE(data, pos, true) };
+const PACK_UINT32_BE = (data, pack, pos) => { pack.writeUInt32BE(data, pos, true) };
+const PACK_INT32_LE = (data, pack, pos) => { pack.writeInt32LE(data, pos, true) };
+const PACK_INT32_BE = (data, pack, pos) => { pack.writeInt32BE(data, pos, true) };
 
-const UNPACK_UINT64_LE = function (data, pos) {
-    return Long.fromBits(data.readInt32LE(pos), data.readInt32LE(pos + 4), true);
-};
+const UNPACK_UINT64_LE = (data, pos) => Long.fromBits(data.readInt32LE(pos), data.readInt32LE(pos + 4), true);
+const UNPACK_UINT64_BE = (data, pos) => Long.fromBits(data.readInt32BE(pos + 4), data.readInt32BE(pos), true);
+const UNPACK_INT64_LE = (data, pos) => Long.fromBits(data.readInt32LE(pos), data.readInt32LE(pos + 4), false);
+const UNPACK_INT64_BE = (data, pos) => Long.fromBits(data.readInt32BE(pos + 4), data.readInt32BE(pos), false);
 
-const UNPACK_UINT64_BE = function (data, pos) {
-    return Long.fromBits(data.readInt32BE(pos + 4), data.readInt32BE(pos), true);
-};
-
-const UNPACK_INT64_LE = function (data, pos) {
-    return Long.fromBits(data.readInt32LE(pos), data.readInt32LE(pos + 4), false);
-};
-
-const UNPACK_INT64_BE = function (data, pos) {
-    return Long.fromBits(data.readInt32BE(pos + 4), data.readInt32BE(pos), false);
-};
-
-const PACK_INT64_LE = function (data, pack, pos) {
+const PACK_INT64_LE = (data, pack, pos) => {
     if (!(data instanceof Long)) data = Long.fromInt(data);
     pack.writeInt32LE(data.getLowBits(), pos, true);
     pack.writeInt32LE(data.getHighBits(), pos + 4, true);
 };
 
-const PACK_INT64_BE = function (data, pack, pos) {
+const PACK_INT64_BE = (data, pack, pos) => {
     if (!(data instanceof Long)) data = Long.fromInt(data);
     pack.writeInt32BE(data.getHighBits(), pos, true);
     pack.writeInt32BE(data.getLowBits(), pos + 4, true);
@@ -125,40 +114,40 @@ const NATIVE_MAP = {
     'c': [
         1,
         1,
-        function (data, pos) { return String.fromCharCode(data[pos]) },
-        function (data, pack, pos) { pack[pos] = data.charCodeAt(0) }
+        (data, pos) => String.fromCharCode(data[pos]),
+        (data, pack, pos) => { pack[pos] = data.charCodeAt(0) }
     ],
     'b': [
         1,
         1,
-        function (data, pos) { return data.readInt8(pos) },
-        function (data, pack, pos) { pack.writeInt8(data, pos, true) }
+        (data, pos) => data.readInt8(pos),
+        (data, pack, pos) => { pack.writeInt8(data, pos, true) }
     ],
     'B': [
         1, 
         1,
-        function (data, pos) { return data[pos] },
-        function (data, pack, pos) { pack[pos] = data }
+        (data, pos) => data[pos],
+        (data, pack, pos) => { pack[pos] = data }
     ],
     'h': [
         2,
         2,
         IS_LITTLE_ENDIAN
-            ? function (data, pos) { return data.readInt16LE(pos) }
-            : function (data, pos) { return data.readInt16BE(pos) },
+            ? (data, pos) => data.readInt16LE(pos)
+            : (data, pos) => data.readInt16BE(pos),
         IS_LITTLE_ENDIAN
-            ? function (data, pack, pos) { return pack.writeInt16LE(data, pos, true) }
-            : function (data, pack, pos) { return pack.writeInt16BE(data, pos, true) }
+            ? (data, pack, pos) => pack.writeInt16LE(data, pos, true)
+            : (data, pack, pos) => pack.writeInt16BE(data, pos, true)
     ],
     'H': [
         2,
         2,
         IS_LITTLE_ENDIAN
-            ? function (data, pos) { return data.readUInt16LE(pos) }
-            : function (data, pos) { return data.readUInt16BE(pos) },
+            ? (data, pos) => data.readUInt16LE(pos)
+            : (data, pos) => data.readUInt16BE(pos),
         IS_LITTLE_ENDIAN
-            ? function (data, pack, pos) { return pack.writeUInt16LE(data, pos, true) }
-            : function (data, pack, pos) { return pack.writeUInt16BE(data, pos, true) }
+            ? (data, pack, pos) => pack.writeUInt16LE(data, pos, true)
+            : (data, pack, pos) => pack.writeUInt16BE(data, pos, true)
     ],
     'i': [
         4,
@@ -188,21 +177,21 @@ const NATIVE_MAP = {
         4,
         4,
         IS_LITTLE_ENDIAN
-            ? function (data, pos) { return data.readFloatLE(pos) }
-            : function (data, pos) { return data.readFloatBE(pos) },
+            ? (data, pos) => data.readFloatLE(pos)
+            : (data, pos) => data.readFloatBE(pos),
         IS_LITTLE_ENDIAN
-            ? function (data, pack, pos) { return pack.writeFloatLE(data, pos, true) }
-            : function (data, pack, pos) { return pack.writeFloatBE(data, pos, true) }
+            ? (data, pack, pos) => pack.writeFloatLE(data, pos, true)
+            : (data, pack, pos) => pack.writeFloatBE(data, pos, true)
     ],
     'd': [
         8,
         8,
         IS_LITTLE_ENDIAN
-            ? function (data, pos) { return data.readDoubleLE(pos) }
-            : function (data, pos) { return data.readDoubleBE(pos) },
+            ? (data, pos) => data.readDoubleLE(pos)
+            : (data, pos) => data.readDoubleBE(pos),
         IS_LITTLE_ENDIAN
-            ? function (data, pack, pos) { return pack.writeDoubleLE(data, pos, true) }
-            : function (data, pack, pos) { return pack.writeDoubleBE(data, pos, true) }
+            ? (data, pack, pos) => pack.writeDoubleLE(data, pos, true)
+            : (data, pack, pos) => pack.writeDoubleBE(data, pos, true)
     ],
     's': [ 1, 1, UNPACK_STRING, PACK_STRING ],
     'p': [ 1, 1, UNPACK_PASCAL_STRING, PACK_PASCAL_STRING ],
@@ -231,8 +220,8 @@ const NATIVE_MAP = {
     '?': [
         1,
         1,
-        function (data, pos) { return data[pos] !== 0},
-        function (data, pack, pos) { pack[pos] = data ? 1 : 0 }
+        (data, pos) => data[pos] !== 0,
+        (data, pack, pos) => { pack[pos] = data ? 1 : 0 }
     ]
 };
 
@@ -241,32 +230,32 @@ const LITTLE_ENDIAN_MAP = {
     'c': [
         1,
         1,
-        function (data, pos) { return String.fromCharCode(data[pos]) },
-        function (data, pack, pos) { pack[pos] = data.charCodeAt(0) }
+        (data, pos) => String.fromCharCode(data[pos]),
+        (data, pack, pos) => { pack[pos] = data.charCodeAt(0) }
     ],
     'b': [
         1,
         1,
-        function (data, pos) { return data.readInt8(pos) },
-        function (data, pack, pos) { pack.writeInt8(data, pos, true) }
+        (data, pos) => data.readInt8(pos),
+        (data, pack, pos) => { pack.writeInt8(data, pos, true) }
     ],
     'B': [
         1,
         1,
-        function (data, pos) { return data[pos] },
-        function (data, pack, pos) { pack[pos] = data }
+        (data, pos) => data[pos],
+        (data, pack, pos) => { pack[pos] = data }
     ],
     'h': [
         2,
         1,
-        function (data, pos) { return data.readInt16LE(pos) },
-        function (data, pack, pos) { return pack.writeInt16LE(data, pos, true) }
+        (data, pos) => data.readInt16LE(pos),
+        (data, pack, pos) => pack.writeInt16LE(data, pos, true),
     ],
     'H': [
         2,
         1,
-        function (data, pos) { return data.readUInt16LE(pos) },
-        function (data, pack, pos) { return pack.writeUInt16LE(data, pos, true) }
+        (data, pos) => data.readUInt16LE(pos),
+        (data, pack, pos) => pack.writeUInt16LE(data, pos, true),
     ],
     'i': [ 4, 1, UNPACK_INT32_LE, PACK_INT32_LE ],
     'I': [ 4, 1, UNPACK_UINT32_LE, PACK_UINT32_LE ],
@@ -275,14 +264,14 @@ const LITTLE_ENDIAN_MAP = {
     'f': [
         4,
         1,
-        function (data, pos) { return data.readFloatLE(pos) },
-        function (data, pack, pos) { return pack.writeFloatLE(data, pos, true) }
+        (data, pos) => data.readFloatLE(pos),
+        (data, pack, pos) => pack.writeFloatLE(data, pos, true),
     ],
     'd': [
         8,
         1,
-        function (data, pos) { return data.readDoubleLE(pos) },
-        function (data, pack, pos) { return pack.writeDoubleLE(data, pos, true) }
+        (data, pos) => data.readDoubleLE(pos),
+        (data, pack, pos) => pack.writeDoubleLE(data, pos, true),
     ],
     's': [ 1, 1, UNPACK_STRING, PACK_STRING ],
     'p': [ 1, 1, UNPACK_PASCAL_STRING, PACK_PASCAL_STRING ],
@@ -297,8 +286,8 @@ const LITTLE_ENDIAN_MAP = {
     '?': [
         1,
         1,
-        function (data, pos) { return data[pos] !== 0},
-        function (data, pack, pos) { pack[pos] = data ? 1 : 0 }
+        (data, pos) => data[pos] !== 0,
+        (data, pack, pos) => { pack[pos] = data ? 1 : 0 }
     ]
 };
 
@@ -307,32 +296,32 @@ const BIG_ENDIAN_MAP = {
     'c': [
         1,
         1,
-        function (data, pos) { return String.fromCharCode(data[pos]) },
-        function (data, pack, pos) { pack[pos] = data.charCodeAt(0) }
+        (data, pos) => String.fromCharCode(data[pos]),
+        (data, pack, pos) => { pack[pos] = data.charCodeAt(0) }
     ],
     'b': [
         1,
         1,
-        function (data, pos) { return data.readInt8(pos) },
-        function (data, pack, pos) { pack.writeInt8(data, pos, true) }
+        (data, pos) => data.readInt8(pos),
+        (data, pack, pos) => { pack.writeInt8(data, pos, true) }
     ],
     'B': [
         1,
         1,
-        function (data, pos) { return data[pos] },
-        function (data, pack, pos) { pack[pos] = data }
+        (data, pos) => data[pos],
+        (data, pack, pos) => { pack[pos] = data }
     ],
     'h': [
         2,
         1,
-        function (data, pos) { return data.readInt16BE(pos) },
-        function (data, pack, pos) { return pack.writeInt16BE(data, pos, true) }
+        (data, pos) => data.readInt16BE(pos),
+        (data, pack, pos) => pack.writeInt16BE(data, pos, true),
     ],
     'H': [
         2,
         1,
-        function (data, pos) { return data.readUInt16BE(pos) },
-        function (data, pack, pos) { return pack.writeUInt16BE(data, pos, true) }
+        (data, pos) => data.readUInt16BE(pos),
+        (data, pack, pos) => pack.writeUInt16BE(data, pos, true),
     ],
     'i': [ 4, 1, UNPACK_INT32_BE, PACK_INT32_BE ],
     'I': [ 4, 1, UNPACK_UINT32_BE, PACK_UINT32_BE ],
@@ -341,14 +330,14 @@ const BIG_ENDIAN_MAP = {
     'f': [
         4,
         1,
-        function (data, pos) { return data.readFloatBE(pos) },
-        function (data, pack, pos) { return pack.writeFloatBE(data, pos, true) }
+        (data, pos) => data.readFloatBE(pos),
+        (data, pack, pos) => pack.writeFloatBE(data, pos, true),
     ],
     'd': [
         8,
         1,
-        function (data, pos) { return data.readDoubleBE(pos) },
-        function (data, pack, pos) { return pack.writeDoubleBE(data, pos, true) }
+        (data, pos) => data.readDoubleBE(pos),
+        (data, pack, pos) => pack.writeDoubleBE(data, pos, true),
     ],
     's': [ 1, 1, UNPACK_STRING, PACK_STRING ],
     'p': [ 1, 1, UNPACK_PASCAL_STRING, PACK_PASCAL_STRING ],
@@ -363,16 +352,16 @@ const BIG_ENDIAN_MAP = {
     '?': [
         1,
         1,
-        function (data, pos) { return data[pos] !== 0},
-        function (data, pack, pos) { pack[pos] = data ? 1 : 0 }
+        (data, pos) => data[pos] !== 0,
+        (data, pack, pos) => { pack[pos] = data ? 1 : 0 }
     ]
 };
 
-var selectMap = function (format) {
+let selectMap = format => {
 
-    var c = format[0];
-    var skipFirst = true;
-    var map = NATIVE_MAP;
+    let c = format[0];
+    let skipFirst = true;
+    let map = NATIVE_MAP;
 
     switch (c) {
         case '<':
@@ -400,16 +389,16 @@ var selectMap = function (format) {
     return {map: map, skipFirst: skipFirst};
 };
 
-var PythonStruct = {
+class PythonStruct {
 
-    sizeOf: function (format) {
+    sizeOf(format) {
 
-        var size = 0;
-        var decimal = null;
+        let size = 0;
+        let decimal = null;
 
-        var i = 0, c, len, op, align;
-        var selected = selectMap(format);
-        var map = selected.map;
+        let i = 0, c, len, op, align;
+        let selected = selectMap(format);
+        let map = selected.map;
         if (selected.skipFirst) {
             i++;
         }
@@ -444,47 +433,50 @@ var PythonStruct = {
         }
 
         return size;
-    },
+    }
 
-    unpack: function (format, data, checkBounds) {
+    unpack (format, data, checkBounds) {
         return this.unpackFrom(format, data, checkBounds, 0)
-    },
+    }
 
-    unpackFrom: function (format, data, checkBounds, position) {
+    unpackFrom(format, data, checkBounds, position) {
 
-        var unpacked = [];
+        let unpacked = [];
 
-        var decimal = null;
+        let decimal = null;
 
-        var i = 0, c, len, op, size, align, repeat, unpack;
-        var selected = selectMap(format);
-        var map = selected.map;
+        let i = 0;
+        let selected = selectMap(format);
+        let map = selected.map;
         if (selected.skipFirst) {
             i++;
         }
 
-        for (len = format.length; i < len; i++) {
-            c = format[i];
+        for (const len = format.length; i < len; i++) {
+            let c = format[i];
 
             if (c >= '0' && c <= '9') {
                 decimal = decimal === null ? c : (decimal + c);
                 continue;
             }
 
-            op = map[c];
+            const op = map[c];
             if (!op) continue; // Ignore other characters
 
-            size = op[0];
+            let size = op[0];
             
             // Align position
-            align = op[1];
+            const align = op[1];
             if (align > 1) {
                 position = Math.ceil(position / align) * align;
             }
 
             // Unpack
             decimal = decimal ? parseInt(decimal, 10) : 0;
-            
+
+            /** @type number */
+            let repeat;
+
             if (c === 's') {
                 repeat = 1;
                 size = decimal;
@@ -495,7 +487,7 @@ var PythonStruct = {
                 repeat = decimal || 1;
             }
             
-            unpack = op[2];
+            let unpack = op[2];
             while (repeat > 0) {
 				
                 if (unpack) {
@@ -519,9 +511,9 @@ var PythonStruct = {
         }
 
         return unpacked;
-    },
+    }
 
-    pack: function (format, data, checkBounds) {
+    pack(format, data, checkBounds) {
         
         // Support python-style argument array for data
         if (!Array.isArray(data)) {
@@ -529,41 +521,44 @@ var PythonStruct = {
             checkBounds = true;
         }
 
-        var packed = new Buffer(PythonStruct.sizeOf(format));
+        let packed = new Buffer(PythonStruct.sizeOf(format));
 
-        var position = 0;
-        var decimal = null;
+        let position = 0;
+        let decimal = null;
 
-        var i = 0, c, len, op, size, align, repeat, pack;
-        var dIndex = 0;
-        var selected = selectMap(format);
-        var map = selected.map;
+        let i = 0;
+        let dIndex = 0;
+        let selected = selectMap(format);
+        let map = selected.map;
         if (selected.skipFirst) {
             i++;
         }
 
-        for (len = format.length; i < len; i++) {
-            c = format[i];
+        for (const len = format.length; i < len; i++) {
+            let c = format[i];
 
             if (c >= '0' && c <= '9') {
                 decimal = decimal === null ? c : (decimal + c);
                 continue;
             }
 
-            op = map[c];
+            const op = map[c];
             if (!op) continue; // Ignore other characters
 
-            size = op[0];
+            let size = op[0];
 
             // Align position
-            align = op[1];
+            const align = op[1];
             if (align > 1) {
                 position = Math.ceil(position / align) * align;
             }
 
             // Pack
             decimal = decimal ? parseInt(decimal, 10) : 0;
-            
+
+            /** @type number */
+            let repeat;
+
             if (c === 's') {
                 repeat = 1;
                 size = decimal;
@@ -574,7 +569,7 @@ var PythonStruct = {
                 repeat = decimal || 1;
             }
             
-            pack = op[3];
+            let pack = op[3];
             while (repeat > 0) {
 				
                 if (pack) {
@@ -602,7 +597,7 @@ var PythonStruct = {
         return packed;
     }
 
-};
+}
 
 module.exports = PythonStruct;
 
