@@ -40,7 +40,8 @@ const IS_64bit = process.arch === 'x64';
 
 const UNPACK_STRING = function (data, pos, length) {
     var nextZero = data.indexOf(0, pos);
-    return data.slice(pos, Math.min(pos + length, nextZero)).toString('utf8');
+    var endIndex = Math.min(pos + length, nextZero === -1 ? data.length : nextZero);
+    return data.slice(pos, endIndex).toString('utf8');
 };
 
 const PACK_STRING = function (data, pack, pos, length) {
