@@ -6,13 +6,21 @@ const UNPACK_INT64_LE = (data, pos) => Long.fromBits(data.readInt32LE(pos), data
 const UNPACK_INT64_BE = (data, pos) => Long.fromBits(data.readInt32BE(pos + 4), data.readInt32BE(pos), false);
 
 const PACK_INT64_LE = (data, pack, pos) => {
-    if (!(data instanceof Long)) data = Long.fromInt(data);
+    if (!(data instanceof Long)) {
+        if (typeof data === 'number')
+            data = Long.fromNumber(data);
+        else data = Long.fromString(data || '');
+    }
     pack.writeInt32LE(data.getLowBits(), pos, true);
     pack.writeInt32LE(data.getHighBits(), pos + 4, true);
 };
 
 const PACK_INT64_BE = (data, pack, pos) => {
-    if (!(data instanceof Long)) data = Long.fromInt(data);
+    if (!(data instanceof Long)) {
+        if (typeof data === 'number')
+            data = Long.fromNumber(data);
+        else data = Long.fromString(data || '');
+    }
     pack.writeInt32BE(data.getHighBits(), pos, true);
     pack.writeInt32BE(data.getLowBits(), pos + 4, true);
 };
