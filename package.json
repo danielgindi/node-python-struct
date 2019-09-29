@@ -27,8 +27,10 @@
   },
   "homepage": "https://github.com/danielgindi/node-python-struct",
   "dependencies": {
-    "eslint": "^6.2.2",
-    "husky": "^3.0.4",
     "long": "^4.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.5.0",
+    "husky": "^3.0.7"
   }
 }
