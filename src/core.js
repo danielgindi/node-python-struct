@@ -455,7 +455,7 @@ function generateClass(options) {
         }
 
         static unpack(format, data, checkBounds) {
-            return this.unpackFrom(format, data, checkBounds, 0);
+            return PythonStruct.unpackFrom(format, data, checkBounds, 0);
         }
 
         static unpackFrom(format, data, checkBounds, position) {
