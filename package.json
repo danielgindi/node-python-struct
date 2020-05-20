@@ -30,7 +30,7 @@
     "long": "^4.0.0"
   },
   "devDependencies": {
-    "eslint": "^6.5.0",
-    "husky": "^3.0.7"
+    "eslint": "^7.0.0",
+    "husky": "^4.2.5"
   }
 }
